@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="getFlights" format="java">
+      <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
+type: object
+properties:
+    queryParams:
+        type: object
+        properties:
+            code: string
+            airline: string]]></types:shape>
+    </types:type>
+    <types:type name="flights_pojo" format="java">
+      <types:shape format="java" element="com.mulesoft.training.Flight"/>
+    </types:type>
+    <types:type name="united_flights" format="json">
+      <types:shape format="weave" example="examples/united_flights_example-1.json"><![CDATA[%dw 2.0
+
+type united_flights = {|
+  flights: Array<{|    code: String,     price: Number {"typeId": "int"},     origin: String,     destination: String,     departureDate: String,     planeType: String,     airlineName: String,     emptySeats: Number {"typeId": "int"}  |}>
+|} {"example": "{\\\"flights\\\":[{\\\"code\\\":\\\"ER38sd\\\",\\\"price\\\":400,\\\"origin\\\":\\\"MUA\\\",\\\"destination\\\":\\\"SFO\\\",\\\"departureDate\\\":\\\"2015\\/03\\/20\\\",\\\"planeType\\\":\\\"Boeing 737\\\",\\\"airlineName\\\":\\\"United\\\",\\\"emptySeats\\\":0},{\\\"code\\\":\\\"ER39rk\\\",\\\"price\\\":945,\\\"origin\\\":\\\"MUA\\\",\\\"destination\\\":\\\"SFO\\\",\\\"departureDate\\\":\\\"2015\\/09\\/11\\\",\\\"planeType\\\":\\\"Boeing 757\\\",\\\"airlineName\\\":\\\"United\\\",\\\"emptySeats\\\":54},{\\\"code\\\":\\\"ER39rj\\\",\\\"price\\\":954,\\\"origin\\\":\\\"MUA\\\",\\\"destination\\\":\\\"SFO\\\",\\\"departureDate\\\":\\\"2015\\/02\\/12\\\",\\\"planeType\\\":\\\"Boeing 777\\\",\\\"airlineName\\\":\\\"United\\\",\\\"emptySeats\\\":23}]}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="string" format="java">
+      <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="getFlightsByDestination" format="java">
+      <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
+type: object
+properties:
+    queryParams:
+        type: object
+        properties:
+            code: string]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#eb6e7263-0871-4a39-bf3b-498f1f2bbeb6">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:attributes type="getFlights"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#f4c521bb-a273-46c1-8997-dc0c86d639c2">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:variables>
+          <types:variable name="airline" type="string"/>
+          <types:variable name="toAirportCode" type="string"/>
+        </types:variables>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#ae1d2118-9670-4afc-84af-3db8c1c71dc2">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="flights_pojo[]"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#e2a7e140-ce39-42fc-b02b-962bf284816c">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:variables>
+          <types:variable name="airline" type="string"/>
+          <types:variable name="toAirportCode" type="string"/>
+        </types:variables>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#d0f45038-83f8-453e-afe5-8ddddf84e5b1">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="united_flights"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#46275e45-0306-457c-9bc9-279a44a9e66f">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="flights_pojo[]"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#9f3eade2-7dd2-4c72-802d-92e428a0d4bd">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:variables>
+          <types:variable name="airline" type="string"/>
+          <types:variable name="toAirportCode" type="string"/>
+        </types:variables>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#3dfde3f2-fb57-42f9-9a94-2ea4d4b4008b">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="flights_pojo[]"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#38ecfa84-c2e7-4786-bd98-d32c3b9f7b83">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:attributes type="getFlightsByDestination"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

@@ -10,12 +10,12 @@ http://www.mulesoft.org/schema/mule/american-flights-api http://www.mulesoft.org
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
 	<flow name="getFlights" doc:id="08cd9184-a638-487a-965f-b207a999cb10" >
 		<choice doc:name="Choice" doc:id="7b99ec1f-58e3-4ee3-8915-ca1fb3f46c27" >
-			<when expression="#[attributes.queryParams.code? and attributes.queryParams.airline?]">
+			<when expression="#[attributes.queryParams.airline?]">
 				<flow-ref doc:name="getFlightsByAirlineAndDestination" doc:id="e72a5426-fab1-495d-913e-762c03a64a42" name="getFlightsByAirlineAndDestination"/>
 			</when>
-			<when expression="#[attributes.queryParams.code?]">
-				<flow-ref doc:name="getFlightsByDestination" doc:id="ee8d7ac2-a0d0-4ed7-9f42-757d21200779" name="getFlightsByDestination"/>
-			</when>
+			<otherwise >
+				<flow-ref doc:name="getFlightsByDestination" doc:id="ee8d7ac2-a0d0-4ed7-9f42-757d21200779" name="getFlightsByDestination" />
+			</otherwise>
 		</choice>
 	</flow>
 	<flow name="getFlightsByDestination" doc:id="7fc2851e-4df1-4090-bcd6-62b5e43d9605" >
